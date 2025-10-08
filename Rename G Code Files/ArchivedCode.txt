@@ -1,0 +1,68 @@
+        private static string RenameGCodeFileBySql(string filePath)
+        {
+            try
+            {
+                string matName = string.Empty;
+                string fileName = filePath.Substring(filePath.LastIndexOf('\\') + 1,
+                                filePath.LastIndexOf('.') - filePath.LastIndexOf('\\') - 1)[..8];
+                matName = MaterialList[fileName].Replace('/','-');
+                return $"{Job.jobFilePath}\\G Codes\\{fileName} _ {matName}.anc";
+            }
+            catch (Exception ex)
+            {
+                Errors.LogError(ex.Message, filePath);
+                return filePath;
+            }
+        }
+
+         public static Dictionary<string, string> GetMaterialNames()
+        {
+            Dictionary<string, string> materialNames = [];
+            if (runningVersion == "2023")
+            {
+                try
+                {
+                    using (OleDbCommand command = new(
+                        File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"QueryMaterialNames.sql")),
+                        DatabaseConnections.oleDbConnection))
+                    {
+                        using (OleDbDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                materialNames.Add(reader.GetString(0), reader.GetString(3));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Read Failed: Job info could not be Accessed.\r\n{ex.Message}");
+                    Errors.LogError(ex.Message);
+                }
+            }
+            if (runningVersion == "2024")
+            {
+                try
+                {
+                    using (SqlCommand command = new(
+                        File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"QueryMaterialNames.sql")),
+                        DatabaseConnections.sqlConnection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                materialNames.Add(reader.GetString(0), reader.GetString(3));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Read Failed: Job info could not be Accessed.\r\n{ex.Message}");
+                    Errors.LogError(ex.Message);
+                }
+            }
+            return materialNames;
+        }

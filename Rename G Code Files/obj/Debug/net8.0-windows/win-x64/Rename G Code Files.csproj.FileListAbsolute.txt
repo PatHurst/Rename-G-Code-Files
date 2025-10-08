@@ -1,0 +1,98 @@
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.csproj.AssemblyReference.cache
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.AssemblyInfoInputs.cache
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.AssemblyInfo.cs
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.csproj.CoreCompileInputs.cache
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Rename G Code Files.exe
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Rename G Code Files.deps.json
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Rename G Code Files.runtimeconfig.json
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Rename G Code Files.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Rename G Code Files.pdb
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Azure.Core.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Azure.Identity.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.Data.SqlClient.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.Identity.Client.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.Logging.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.Protocols.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.Tokens.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.SqlServer.Server.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.ClientModel.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Configuration.ConfigurationManager.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Data.OleDb.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Diagnostics.EventLog.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Diagnostics.PerformanceCounter.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Memory.Data.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Runtime.Caching.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\de\Microsoft.Data.SqlClient.resources.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\es\Microsoft.Data.SqlClient.resources.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\fr\Microsoft.Data.SqlClient.resources.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\it\Microsoft.Data.SqlClient.resources.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\ja\Microsoft.Data.SqlClient.resources.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\ko\Microsoft.Data.SqlClient.resources.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\pt-BR\Microsoft.Data.SqlClient.resources.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\ru\Microsoft.Data.SqlClient.resources.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\zh-Hans\Microsoft.Data.SqlClient.resources.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\zh-Hant\Microsoft.Data.SqlClient.resources.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G.4CDE208C.Up2Date
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\refint\Rename G Code Files.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.pdb
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.genruntimeconfig.cache
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\ref\Rename G Code Files.dll
+c:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\QueryMaterialNames.sql
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Rename G Code Files.exe
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\QueryMaterialNames.sql
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Rename G Code Files.deps.json
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Rename G Code Files.runtimeconfig.json
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Rename G Code Files.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Rename G Code Files.pdb
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Azure.Core.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Azure.Identity.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.Bcl.AsyncInterfaces.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.Data.SqlClient.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.Identity.Client.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.Identity.Client.Extensions.Msal.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.Abstractions.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.JsonWebTokens.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.Logging.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.Protocols.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.IdentityModel.Tokens.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.SqlServer.Server.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.ClientModel.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Configuration.ConfigurationManager.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Data.OleDb.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Diagnostics.EventLog.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Diagnostics.PerformanceCounter.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.IdentityModel.Tokens.Jwt.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Memory.Data.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\System.Runtime.Caching.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\de\Microsoft.Data.SqlClient.resources.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\es\Microsoft.Data.SqlClient.resources.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\fr\Microsoft.Data.SqlClient.resources.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\it\Microsoft.Data.SqlClient.resources.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\ja\Microsoft.Data.SqlClient.resources.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\ko\Microsoft.Data.SqlClient.resources.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\pt-BR\Microsoft.Data.SqlClient.resources.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\ru\Microsoft.Data.SqlClient.resources.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\zh-Hans\Microsoft.Data.SqlClient.resources.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\zh-Hant\Microsoft.Data.SqlClient.resources.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Debug\net8.0-windows\win-x64\Microsoft.Data.SqlClient.SNI.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.csproj.AssemblyReference.cache
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.AssemblyInfoInputs.cache
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.AssemblyInfo.cs
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.csproj.CoreCompileInputs.cache
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G.4CDE208C.Up2Date
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\refint\Rename G Code Files.dll
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.pdb
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\Rename G Code Files.genruntimeconfig.cache
+c:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\obj\Debug\net8.0-windows\win-x64\ref\Rename G Code Files.dll

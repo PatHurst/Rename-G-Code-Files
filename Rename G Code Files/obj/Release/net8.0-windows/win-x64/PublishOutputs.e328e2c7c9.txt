@@ -1,0 +1,33 @@
+C:\users\patri\OneDrive\Desktop\Rename G Code Files.exe
+C:\users\patri\OneDrive\Desktop\Rename G Code Files.dll
+C:\users\patri\OneDrive\Desktop\Rename G Code Files.deps.json
+C:\users\patri\OneDrive\Desktop\Rename G Code Files.runtimeconfig.json
+C:\users\patri\OneDrive\Desktop\Rename G Code Files.pdb
+C:\users\patri\OneDrive\Desktop\Azure.Core.dll
+C:\users\patri\OneDrive\Desktop\Azure.Identity.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.Bcl.AsyncInterfaces.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.Data.SqlClient.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.Identity.Client.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.IdentityModel.Abstractions.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.IdentityModel.Logging.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.IdentityModel.Protocols.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.IdentityModel.Tokens.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.SqlServer.Server.dll
+C:\users\patri\OneDrive\Desktop\System.ClientModel.dll
+C:\users\patri\OneDrive\Desktop\System.IdentityModel.Tokens.Jwt.dll
+C:\users\patri\OneDrive\Desktop\System.Memory.Data.dll
+C:\users\patri\OneDrive\Desktop\System.Runtime.Caching.dll
+C:\users\patri\OneDrive\Desktop\de\Microsoft.Data.SqlClient.resources.dll
+C:\users\patri\OneDrive\Desktop\es\Microsoft.Data.SqlClient.resources.dll
+C:\users\patri\OneDrive\Desktop\fr\Microsoft.Data.SqlClient.resources.dll
+C:\users\patri\OneDrive\Desktop\it\Microsoft.Data.SqlClient.resources.dll
+C:\users\patri\OneDrive\Desktop\ja\Microsoft.Data.SqlClient.resources.dll
+C:\users\patri\OneDrive\Desktop\ko\Microsoft.Data.SqlClient.resources.dll
+C:\users\patri\OneDrive\Desktop\pt-BR\Microsoft.Data.SqlClient.resources.dll
+C:\users\patri\OneDrive\Desktop\ru\Microsoft.Data.SqlClient.resources.dll
+C:\users\patri\OneDrive\Desktop\zh-Hans\Microsoft.Data.SqlClient.resources.dll
+C:\users\patri\OneDrive\Desktop\zh-Hant\Microsoft.Data.SqlClient.resources.dll
+C:\users\patri\OneDrive\Desktop\Microsoft.Data.SqlClient.SNI.dll

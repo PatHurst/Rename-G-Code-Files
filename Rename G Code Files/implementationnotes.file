@@ -1,0 +1,6 @@
+TODO:
+    Implement task based async methods for moving files.
+    Implement condensed methods for SQL queries.
+    Add info block to top of G Code Files
+    Rename by SQL query?
+    Check for negative Z values

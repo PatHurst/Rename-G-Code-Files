@@ -1,0 +1,3 @@
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\users\patri\Onedrive\Desktop\Rename G Code Files.pdb
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\users\patri\Onedrive\Desktop\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\patri\OneDrive\Documents\Visual Studio 2022\Projects\Rename G Code Files\Rename G Code Files\users\patri\Onedrive\Desktop\Rename G Code Files.exe
