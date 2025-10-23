@@ -1,20 +1,13 @@
-﻿
-
-using System.Diagnostics;
-using Rename_G_Code_Files.src;
-
-namespace Rename_G_Code_Files
+﻿namespace Rename_G_Code_Files.src;
+internal class Program
 {
-    internal class Program
+    private static void Main(string[] args)
     {
-        private static void Main(string[] args)
-        {
-            Job job = new();
-            FileHandler fileHandler = new(job);
-            fileHandler.MoveAllOutputFiles();
-            Logger.LogRunData(job);
-            Environment.Exit(0);
-        }
+        Job job = new();
+        FileHandler fileHandler = new(job);
+        fileHandler.MoveAllOutputFiles();
+        Logger.Logger.LogRunData(job);
+        Environment.Exit(0);
     }
 }
 

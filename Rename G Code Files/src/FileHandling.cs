@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using Microsoft.Win32;
+using Rename_G_Code_Files.src.Logger;
 
 namespace Rename_G_Code_Files.src;
 
@@ -50,7 +51,7 @@ internal class FileHandler
         }
         catch (Exception ex)
         {
-            Logger.ExceptionHandler(ex);
+            Logger.Logger.ExceptionHandler(ex);
         }
     }
 
@@ -100,7 +101,7 @@ internal class FileHandler
         }
         catch (Exception ex)
         {
-            Logger.ExceptionHandler(ex);
+            Logger.Logger.ExceptionHandler(ex);
         }
     }
 

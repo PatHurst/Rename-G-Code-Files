@@ -1,7 +1,7 @@
 using Microsoft.Win32;
 using Rename_G_Code_Files.src;
 
-namespace Rename_G_Code_Files;
+namespace Rename_G_Code_Files.src.Logger;
 
 internal class Logger
 {

@@ -1,5 +1,5 @@
 using Microsoft.Win32;
-namespace Rename_G_Code_Files;
+namespace Rename_G_Code_Files.src;
 
 internal static class Util
 {

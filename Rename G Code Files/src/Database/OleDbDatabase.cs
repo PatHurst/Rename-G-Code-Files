@@ -2,7 +2,7 @@ using System.Data.OleDb;
 using System.Data.Common;
 using System.Data;
 
-namespace Rename_G_Code_Files.Database
+namespace Rename_G_Code_Files.src.Database
 {
     class OleDbDatabase : Database
     {

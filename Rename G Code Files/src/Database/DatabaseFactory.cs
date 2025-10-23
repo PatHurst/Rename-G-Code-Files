@@ -3,7 +3,7 @@ using System.Data.Common;
 using Microsoft.Win32;
 using Rename_G_Code_Files.src;
 
-namespace Rename_G_Code_Files.Database
+namespace Rename_G_Code_Files.src.Database
 {
     internal class DatabaseFactory
     {

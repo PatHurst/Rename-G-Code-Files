@@ -1,6 +1,6 @@
 using System.Data.Common;
 using Microsoft.Win32;
-using Rename_G_Code_Files.Database;
+using Rename_G_Code_Files.src.Database;
 
 namespace Rename_G_Code_Files.src;
 
@@ -95,11 +95,11 @@ internal class Job
         }
         catch (DbException ex)
         {
-            Logger.ExceptionHandler(ex);
+            Logger.Logger.ExceptionHandler(ex);
         }
         catch (InvalidOperationException ex)
         {
-            Logger.ExceptionHandler(ex);
+            Logger.Logger.ExceptionHandler(ex);
         }
     }
 }

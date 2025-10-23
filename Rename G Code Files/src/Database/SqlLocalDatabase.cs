@@ -2,7 +2,7 @@ using System.Data.Common;
 using System.Data;
 using Microsoft.Data.SqlClient;
 
-namespace Rename_G_Code_Files.Database
+namespace Rename_G_Code_Files.src.Database
 {
     class SqlLocalDatabase : Database
     {
