@@ -1,42 +1,43 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using Microsoft.Win32;
-using Rename_G_Code_Files.src.Logger;
+using Rename_G_Code_Files.src;
 
 namespace Rename_G_Code_Files.src;
 
 internal class FileHandler
 {
-    internal FileHandler(Job job)
+    internal FileHandler(Run run)
     {
-        this.job = job;
+        _run = run;
     }
 
-    private Job job;
+    private readonly Run _run;
 
     /// <summary>
-    /// Moves all the output files to the correct directories.
+    ///     Moves all the output files to the correct directories.
     /// </summary>
     public void MoveAllOutputFiles()
     {
-        if (Directory.GetFiles(job.OutputPath).Length > 0)
+        if (Directory.GetFiles(_run.GCodeOutputPath).Length > 0)
         {
-            MoveAndRenameGCodeFiles(job.OutputPath);
-            MoveJobStateFile(job.OutputPath);
+            MoveAndRenameGCodeFiles();
+            MoveJobStateFile();
         }
         else
         {
+            Logger.Instance.LogInformation("No files found in " + _run.GCodeOutputPath);
             Environment.Exit(0);
         }
     }
 
-    private void MoveAndRenameGCodeFiles(string gCodeSource)
+    private void MoveAndRenameGCodeFiles()
     {
-        if (!Directory.Exists(gCodeSource))
-            throw new ArgumentNullException(gCodeSource, $"G Code source {gCodeSource} does not Exist!");
-        if (!Directory.Exists(job.GCodePath))
-            Directory.CreateDirectory(job.GCodePath);
-        foreach (string file in Directory.GetFiles(gCodeSource, "*.anc"))
+        if (!Directory.Exists(_run.GCodeOutputPath))
+            throw new ArgumentNullException(_run.GCodeOutputPath, $"G Code source {_run.GCodeOutputPath} does not Exist!");
+        if (!Directory.Exists(_run.GCodeOutputPath))
+            Directory.CreateDirectory(_run.GCodeOutputPath);
+        foreach (string file in Directory.GetFiles(_run.GCodeOutputPath, "*.anc"))
         {
             AddSummaryToCNCFile(file);
             MoveFile(file, RenameGCodeFileByReadLines(file));
@@ -51,7 +52,7 @@ internal class FileHandler
         }
         catch (Exception ex)
         {
-            Logger.Logger.ExceptionHandler(ex);
+            Logger.Instance.LogException(ex);
         }
     }
 
@@ -72,16 +73,16 @@ internal class FileHandler
         newFileName = Util.Right(filePath, filePath.Length - filePath
                     .LastIndexOf('\\') - 1).Substring(0, Util.Right(filePath, filePath.Length - filePath
                     .LastIndexOf('\\') - 1).LastIndexOf('.'));
-        return $"{job.GCodePath}\\{newFileName} _ {matName}.anc";
+        return $"{_run.DestinationPath}\\{newFileName} _ {matName}.anc";
     }
 
-    private void MoveJobStateFile(string jobStateSource)
+    private void MoveJobStateFile()
     {
-        JobStateFileExists();
-        foreach (string file in Directory.GetFiles(jobStateSource, "*.sn?"))
+        WaitForJobStateFile();
+        foreach (string file in Directory.GetFiles(_run.JobStateOutputPath, "*.sn?"))
         {
             string ext = Util.Right(file, 4);
-            string newFilePath = $"{job.GCodePath}\\{job.Name}_Job State {job.OutputTime}{ext}";
+            string newFilePath = $"{_run.DestinationPath}\\{_run.CurrentJob.Name}_Job State {_run.OutputTime}{ext}";
             MoveFile(file, newFilePath);
         }
     }
@@ -94,24 +95,24 @@ internal class FileHandler
             using StreamWriter writer = File.CreateText(filePath);
             string header = $"%\r\n" +
                             $"//=================== INFO ===================//\r\n" +
-                            $"// JOB NAME: {job.Name}\r\n" +
-                            $"// OUTPUT TIME: {job.OutputTime}\r\n";
+                            $"// JOB NAME: {_run.CurrentJob.Name}\r\n" +
+                            $"// OUTPUT TIME: {_run.OutputTime}\r\n";
             writer.Write(header);
             writer.Write(tempText);
         }
         catch (Exception ex)
         {
-            Logger.Logger.ExceptionHandler(ex);
+            Logger.Instance.LogException(ex);
         }
     }
 
     
     
-    private void JobStateFileExists()
+    private void WaitForJobStateFile()
     {
         for (int counter = 0; counter < 60; counter++)
         {
-            if (Directory.GetFiles(job.JobStateSource, "*.sn?").Length > 0)
+            if (Directory.GetFiles(_run.JobStateOutputPath, "*.sn?").Length > 0)
             {
                 break;
             }

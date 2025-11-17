@@ -17,7 +17,7 @@ namespace Rename_G_Code_Files.src.Database
         private readonly string connectionString;
         private readonly string databasePath;
 
-        public override DbConnection Connection
+        protected override DbConnection Connection
         {
             get
             {
@@ -30,7 +30,7 @@ namespace Rename_G_Code_Files.src.Database
             }
         }
 
-        public override DbCommand Command
+        protected override DbCommand Command
         {
             get
             {
@@ -42,19 +42,6 @@ namespace Rename_G_Code_Files.src.Database
             }
         }
 
-        public override void Execute(string sql)
-        {
-            Command.CommandText = sql;
-            Command.ExecuteNonQuery();
-        }
-
-        public override DbDataReader Read(string sql)
-        {
-            Command.CommandText = sql;
-            DbDataReader reader = Command.ExecuteReader();
-            return reader;
-        }
-
         public override DateTime GetLastModifiedDate()
         {
             DateTime lastModified = DateTime.MinValue;
@@ -63,10 +50,8 @@ namespace Rename_G_Code_Files.src.Database
             FROM sys.dm_db_index_usage_stats AS ius WHERE ius.database_id = DB_ID();
             """;
             using DbDataReader reader = Read(sql);
-            while (reader.Read())
-            {
-                lastModified = reader.GetDateTime(0);
-            }
+            if (reader.Read())
+                lastModified = reader.GetValue(0) is DBNull ? lastModified : reader.GetDateTime(0);
             return lastModified;
         }
     }
