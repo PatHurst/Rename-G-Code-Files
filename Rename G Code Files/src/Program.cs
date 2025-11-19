@@ -19,7 +19,7 @@ internal class Program
     /// </param>
     private static void Main(string[] args)
     {
-        args = ["", "2025", @"C:\_Cabinet Vision\S2M Output_temp"];
+        //args = ["2025", "C:\\_Cabinet Vision\\S2M Output_temp"];
         int version = 0;
         string outputPath = string.Empty;
         try
@@ -53,7 +53,7 @@ internal class Program
                 {
                     path += "\\G Codes";
                 }
-                run.DestinationPath = path;
+                run.DestinationPath = path + run.RunTag;
             }
             else
             {
@@ -73,13 +73,13 @@ internal class Program
                 key = Console.ReadKey();
             }
             while (key.KeyChar < 1 || key.KeyChar > run.Jobs.Count());
-            run.DestinationPath = run.Jobs.ToList()[key.KeyChar].GCodePath;
+            run.DestinationPath = run.Jobs.ToList()[key.KeyChar].GCodePath + run.RunTag;
             run.CurrentJob = run.Jobs.ToList()[key.KeyChar];
         }
         else
         {
             run.CurrentJob = run.Jobs.First();
-            run.DestinationPath = run.Jobs.First().GCodePath;
+            run.DestinationPath = run.Jobs.First().GCodePath + run.RunTag;
         }
 
         FileHandler fileHandler= new(run);
@@ -91,18 +91,17 @@ internal class Program
 
     private static (int version, string path) ParseArgs(string[] args)
     {
-        string[] arguments = [.. args.Skip(1)];
-        if (arguments.Length < 2)
+        if (args.Length < 2)
         {
             throw new ArgumentException("Insufficient arguments provided!");
         }
-        if (int.TryParse(arguments[0], out int v) && !string.IsNullOrEmpty(arguments[1]))
+        if (int.TryParse(args[0], out int v) && !string.IsNullOrEmpty(args[1]))
         {
-            return (v, arguments[1]);
+            return (v, args[1]);
         }
         else
         {
-            throw new ArgumentException(string.Format("Could not parse arguments! {0} {1}" + Environment.NewLine + "Expected 0:int 1:string", arguments[0], arguments[1]));
+            throw new ArgumentException(string.Format("Could not parse arguments! {0} {1}" + Environment.NewLine + "Expected 0:int 1:string", args[0], args[1]));
         }
     }
 }

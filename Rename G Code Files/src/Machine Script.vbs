@@ -8,7 +8,7 @@
 Sub Main()
 
     Dim objShell : Set objShell = CreateObject("Wscript.Shell")
-    Dim exePath : Set exePath = "C:\Program Files\Hurst Software\Rename G Code Files\Rename G Code Files.exe"
+    Dim exePath : exePath = "C:\Program Files\Hurst Software\Rename G Code Files\Rename G Code Files.exe"
 
     'Call the rename utility with args
     '   arg 0 - running version

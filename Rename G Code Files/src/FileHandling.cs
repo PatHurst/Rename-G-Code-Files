@@ -27,6 +27,7 @@ internal class FileHandler
         else
         {
             Logger.Instance.LogInformation("No files found in " + _run.GCodeOutputPath);
+            Logger.Instance.LogData(_run);
             Environment.Exit(0);
         }
     }
@@ -35,8 +36,8 @@ internal class FileHandler
     {
         if (!Directory.Exists(_run.GCodeOutputPath))
             throw new ArgumentNullException(_run.GCodeOutputPath, $"G Code source {_run.GCodeOutputPath} does not Exist!");
-        if (!Directory.Exists(_run.GCodeOutputPath))
-            Directory.CreateDirectory(_run.GCodeOutputPath);
+        if (!Directory.Exists(_run.DestinationPath))
+            Directory.CreateDirectory(_run.DestinationPath);
         foreach (string file in Directory.GetFiles(_run.GCodeOutputPath, "*.anc"))
         {
             AddSummaryToCNCFile(file);
@@ -59,20 +60,20 @@ internal class FileHandler
     private string RenameGCodeFileByReadLines(string filePath)
     {
         string matName = string.Empty;
-        string newFileName = string.Empty;
+        string newFileName;
         string searchString = "// MATERIAL:";
         foreach (string line in File.ReadLines(filePath))
         {
             if (line.StartsWith(searchString))
             {
-                matName = Util.Right(line, line.Length - searchString.Length).Replace("/", "-");
+                matName = Util.Right(line, line.Length - searchString.Length).Replace("/", "-").Trim();
                 break;
             }
         }
         // Cuts the path and extension off the file path.
         newFileName = Util.Right(filePath, filePath.Length - filePath
-                    .LastIndexOf('\\') - 1).Substring(0, Util.Right(filePath, filePath.Length - filePath
-                    .LastIndexOf('\\') - 1).LastIndexOf('.'));
+                    .LastIndexOf('\\') - 1)[..Util.Right(filePath, filePath.Length - filePath
+                    .LastIndexOf('\\') - 1).LastIndexOf('.')];
         return $"{_run.DestinationPath}\\{newFileName} _ {matName}.anc";
     }
 
@@ -82,7 +83,7 @@ internal class FileHandler
         foreach (string file in Directory.GetFiles(_run.JobStateOutputPath, "*.sn?"))
         {
             string ext = Util.Right(file, 4);
-            string newFilePath = $"{_run.DestinationPath}\\{_run.CurrentJob.Name}_Job State {_run.OutputTime}{ext}";
+            string newFilePath = $"{_run.DestinationPath}\\{_run.CurrentJob.Name}_{_run.OutputTime:ddd, MMM dd yyyy hh-mm-ss}{ext}";
             MoveFile(file, newFilePath);
         }
     }

@@ -55,11 +55,14 @@ internal class Logger
     {
         var nl = Environment.NewLine;
         string todayDate = DateTime.Now.Date.ToString("MM/dd/yyyy");
-        string logFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @".\Logging", @"DataLog.log");
+        string logFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Logging", @"DataLog.log");
         try
         {
             if (!File.Exists(logFile))
+            {
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Logging"));
                 File.Create(logFile);
+            }
         }
         catch
         {
@@ -69,9 +72,9 @@ internal class Logger
         var stringBuilder = new StringBuilder();
 
         stringBuilder.AppendLine($"\r\n\r\n\r\n\r\n********************************************* Begin Log {todayDate} {DateTime.Now.TimeOfDay} *********************************************")
-            .AppendLine($"RunTag = {run.RunTag};  RunTime = {run.OutputTime};  OutputPath = {run.DestinationPath};").Append(nl)
+            .AppendLine($"Version = {run.CurrentJob.CVVersion};RunTag = {run.RunTag};  RunTime = {run.OutputTime};  OutputPath = {run.GCodeOutputPath};").Append(nl)
             .AppendLine("\r\n****************** Output ******************")
-            .AppendLine($"Job output files moved to {run.GCodeOutputPath}").Append(nl);
+            .AppendLine($"Job output files moved to {run.DestinationPath}").Append(nl);
 
         if (exceptions.Count > 0)
         {
@@ -94,9 +97,18 @@ internal class Logger
 
         stringBuilder.AppendLine($"\r\n********************************************* End Log {todayDate} {DateTime.Now.TimeOfDay} *********************************************");
 
-        var writer = File.AppendText(logFile);
-        writer.Write(stringBuilder.ToString());
-        writer.Flush();
-        writer.Dispose();
+        StreamWriter? writer = null;
+        try
+        {
+            writer = File.AppendText(logFile);
+            writer?.Write(stringBuilder.ToString());
+
+        }
+        catch { }
+        finally
+        {
+            writer?.Flush();
+            writer?.Dispose();
+        }
     }
 }
