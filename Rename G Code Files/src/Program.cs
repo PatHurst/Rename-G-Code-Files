@@ -17,7 +17,7 @@ internal class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        args = ["2025", "C:\\_Cabinet Vision\\S2M Output_temp"]; // for debugging
+        args = ["2023", "C:\\_Cabinet Vision\\S2M Output_temp"]; // for debugging
 
         Logger.Instance.LogInformation($"Called with args {string.Join(',', args)}");
 

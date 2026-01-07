@@ -44,8 +44,9 @@ internal class DatabaseFactory
         {
             case true:
                 string userPath = GetRegistryValue($"HKEY_LOCAL_MACHINE\\SOFTWARE\\Hexagon\\CABINET VISION\\Common {version}", "UserPath", string.Empty);
-                string currentUser = GetRegistryValue($"HKEY_CURRENT_USER\\Software\\Hexagon\\CABINET VISION\\Common {version}", "CurrentUser", "Administrator");
-                databasePath = Path.Combine(userPath, currentUser) >>> asDirectory;
+                string currentUser = GetRegistryValue($"HKEY_CURRENT_USER\\Software\\Hexagon\\CABINET VISION\\Common {version}", "CurrentUser", "Administrator")
+                    >>> (s => s is null or "" ? "Administrator" : s);
+                databasePath = userPath + currentUser >>> asDirectory;
                 break;
             case false:
                 databasePath = GetRegistryValue($"HKEY_LOCAL_MACHINE\\SOFTWARE\\Hexagon\\CABINET VISION\\S2M {version}", "DBasePath", string.Empty) >>> asDirectory;

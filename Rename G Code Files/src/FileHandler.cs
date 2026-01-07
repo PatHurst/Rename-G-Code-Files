@@ -33,16 +33,12 @@ internal class FileHandler
             throw new ArgumentException(_run.GCodeOutputPath, $"G Code source {_run.GCodeOutputPath} does not Exist!");
         if (!Directory.Exists(_run.DestinationPath))
             Directory.CreateDirectory(_run.DestinationPath);
-        foreach (string file in Directory.GetFiles(_run.GCodeOutputPath, "*.anc"))
+        foreach (string file in Directory.GetFiles(_run.GCodeOutputPath, $"{_run.RunTag}*.anc"))
         {
             AddSummaryToCNCFile(file);
-            MoveFile(file, RenameGCodeFileByReadLines(file));
+            File.Move(file, RenameGCodeFileByReadLines(file), true);
         }
     }
-
-    private static void MoveFile(string oldFilePath, string newFilePath) =>
-        Try(() => File.Move(oldFilePath, newFilePath,true))
-        .IfFail(e => Logger.Instance.LogException(e));
 
     private string RenameGCodeFileByReadLines(string filePath)
     {
@@ -63,7 +59,7 @@ internal class FileHandler
         {
             string ext = Path.GetExtension(file);
             string newFilePath = $"{_run.DestinationPath}\\{_run.CurrentJob.Name}_{_run.OutputTime:ddd, MMM dd yyyy hh-mm-ss}{ext}";
-            MoveFile(file, newFilePath);
+            File.Move(file, newFilePath, true);
         }
     }
 

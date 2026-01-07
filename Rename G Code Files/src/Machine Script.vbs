@@ -13,6 +13,8 @@ Sub Main()
     'Call the rename utility with args
     '   arg 0 - running version
     '   arg 1 - output path
-    Call objShell.Run(Chr(34) & exePath & Chr(34) & " " & Left(Right(NCPath,5),4) & " " & Chr(34) & CVOutputPath & Chr(34))
+    Dim cmd : cmd = Chr(34) & exePath & Chr(34) & " " & Left(Right(NCPath,5),4) & " " & Chr(34) & CVOutputPath
+    'MsgBox cmd
+    Call objShell.Run(cmd)
 
 End Sub
