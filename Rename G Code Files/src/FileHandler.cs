@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Runtime.CompilerServices;
-using Microsoft.Win32;
-using Rename_G_Code_Files.src;
-
 namespace Rename_G_Code_Files.src;
 
 internal class FileHandler
@@ -35,7 +30,7 @@ internal class FileHandler
     private void MoveAndRenameGCodeFiles()
     {
         if (!Directory.Exists(_run.GCodeOutputPath))
-            throw new ArgumentNullException(_run.GCodeOutputPath, $"G Code source {_run.GCodeOutputPath} does not Exist!");
+            throw new ArgumentException(_run.GCodeOutputPath, $"G Code source {_run.GCodeOutputPath} does not Exist!");
         if (!Directory.Exists(_run.DestinationPath))
             Directory.CreateDirectory(_run.DestinationPath);
         foreach (string file in Directory.GetFiles(_run.GCodeOutputPath, "*.anc"))
@@ -45,35 +40,19 @@ internal class FileHandler
         }
     }
 
-    private void MoveFile(string oldFilePath, string newFilePath)
-    {
-        try
-        {
-            File.Move(oldFilePath, newFilePath,true);
-        }
-        catch (Exception ex)
-        {
-            Logger.Instance.LogException(ex);
-        }
-    }
+    private static void MoveFile(string oldFilePath, string newFilePath) =>
+        Try(() => File.Move(oldFilePath, newFilePath,true))
+        .IfFail(e => Logger.Instance.LogException(e));
 
     private string RenameGCodeFileByReadLines(string filePath)
     {
-        string matName = string.Empty;
-        string newFileName;
         string searchString = "// MATERIAL:";
-        foreach (string line in File.ReadLines(filePath))
-        {
-            if (line.StartsWith(searchString))
-            {
-                matName = Util.Right(line, line.Length - searchString.Length).Replace("/", "-").Trim();
-                break;
-            }
-        }
-        // Cuts the path and extension off the file path.
-        newFileName = Util.Right(filePath, filePath.Length - filePath
-                    .LastIndexOf('\\') - 1)[..Util.Right(filePath, filePath.Length - filePath
-                    .LastIndexOf('\\') - 1).LastIndexOf('.')];
+        string matName = File.ReadLines(filePath)
+            .Find(l => l.StartsWith(searchString))
+            .Map(l => Right(l, l.Length - searchString.Length).Replace("/", "-").Trim())
+            .IfNone(string.Empty);
+
+        string newFileName = Path.GetFileNameWithoutExtension(filePath);
         return $"{_run.DestinationPath}\\{newFileName} _ {matName}.anc";
     }
 
@@ -82,7 +61,7 @@ internal class FileHandler
         WaitForJobStateFile();
         foreach (string file in Directory.GetFiles(_run.JobStateOutputPath, "*.sn?"))
         {
-            string ext = Util.Right(file, 4);
+            string ext = Path.GetExtension(file);
             string newFilePath = $"{_run.DestinationPath}\\{_run.CurrentJob.Name}_{_run.OutputTime:ddd, MMM dd yyyy hh-mm-ss}{ext}";
             MoveFile(file, newFilePath);
         }
@@ -100,6 +79,7 @@ internal class FileHandler
                             $"// OUTPUT TIME: {_run.OutputTime}\r\n";
             writer.Write(header);
             writer.Write(tempText);
+            writer.Flush();
         }
         catch (Exception ex)
         {

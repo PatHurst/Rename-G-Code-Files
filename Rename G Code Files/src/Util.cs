@@ -1,21 +1,45 @@
-using System.CodeDom;
-using Microsoft.Win32;
 namespace Rename_G_Code_Files.src;
 
 internal static class Util
 {
-    public static T GetRegistryValue<T>(string keyPath, string value)
-    {
-        object? read = Registry.GetValue(keyPath, value, null);
-        if (read is null)
-            return default!;
-        if (typeof(T) == typeof(int))
-            return (T)(object)Convert.ToInt32(read);
-        return read is null ? default! : (T)read!;
-    }
+    public static T GetRegistryValue<T>(string keyPath, string value, T ifFailOrNull) =>
+        Try(
+            Registry.GetValue(keyPath, value, null) >>>
+                (o => o is null
+                    ? ifFailOrNull
+                    : (T)Convert.ChangeType(o, typeof(T)))
+        )
+        .IfFail(ifFailOrNull);
 
-    public static string Right(string original, int characters)
+    public static string Right(string original, int characters) => original[^characters..];
+
+    public static Func<string,string> asDirectory = path =>
+        path.EndsWith('\\')
+            ? path
+            : path + "\\";
+
+    public static string UserSelectFolder(string reason = "")
     {
-        return original[^characters..];
+        if (reason is not "")
+        {
+            MessageBox.Show(reason);
+        }
+        var dialog = new FolderBrowserDialog();
+        if (dialog.ShowDialog() == DialogResult.OK)
+        {
+            if (Directory.Exists(dialog.SelectedPath))
+            {
+                return dialog.SelectedPath;
+            }
+            else
+            {
+                MessageBox.Show("The directory you selected is invalid!");
+                return UserSelectFolder(reason);
+            }
+        }
+        else
+        {
+            return UserSelectFolder(reason);
+        }
     }
 }

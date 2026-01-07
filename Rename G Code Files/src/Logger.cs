@@ -72,7 +72,7 @@ internal class Logger
         var stringBuilder = new StringBuilder();
 
         stringBuilder.AppendLine($"\r\n\r\n\r\n\r\n********************************************* Begin Log {todayDate} {DateTime.Now.TimeOfDay} *********************************************")
-            .AppendLine($"Version = {run.CurrentJob.CVVersion};RunTag = {run.RunTag};  RunTime = {run.OutputTime};  OutputPath = {run.GCodeOutputPath};").Append(nl)
+            .AppendLine($"RunTag = {run.RunTag};  RunTime = {run.OutputTime};  OutputPath = {run.GCodeOutputPath};").Append(nl)
             .AppendLine("\r\n****************** Output ******************")
             .AppendLine($"Job output files moved to {run.DestinationPath}").Append(nl);
 

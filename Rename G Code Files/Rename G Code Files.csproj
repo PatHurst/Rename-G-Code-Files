@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <PublishSingleFile>True</PublishSingleFile>
 	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <SelfContained>False</SelfContained>
     <RootNamespace>Rename_G_Code_Files</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="System.Data.Oledb" Version="8.0.1" />
   </ItemGroup>

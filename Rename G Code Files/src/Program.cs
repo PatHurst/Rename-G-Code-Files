@@ -1,108 +1,118 @@
-﻿using Rename_G_Code_Files.src.Database;
-
-namespace Rename_G_Code_Files.src;
+﻿namespace Rename_G_Code_Files.src;
 
 internal class Program
 {
     /// <summary>
-    ///     Program Entry Point.
+    ///     Program Entry Point. Called from machine script in CV. 
     /// </summary>
     /// <remarks>
     ///     <list type="bullet"> 
-    ///         <item>Arg 0: Executing file's name</item>
-    ///         <item>Arg 1: CV Version</item>
-    ///         <item>Arg 2: Output Path</item>
+    ///         <item>Arg 0: CV Version</item>
+    ///         <item>Arg 1: Output Path</item>
     ///     </list>
     /// </remarks>
     /// <param name="args">
     ///     A list of the command line args
     /// </param>
+    [STAThread]
     private static void Main(string[] args)
     {
-        //args = ["2025", "C:\\_Cabinet Vision\\S2M Output_temp"];
-        int version = 0;
-        string outputPath = string.Empty;
-        try
+        args = ["2025", "C:\\_Cabinet Vision\\S2M Output_temp"]; // for debugging
+
+        Logger.Instance.LogInformation($"Called with args {string.Join(',', args)}");
+
+        // Parse the command line arguments, asking for user input on failure.
+        (int version, string outputPath) = ParseArgs(args)
+            .IfFail(e =>
+            {
+                WriteLine(e);
+                int version = Prompt("Enter your CV version",
+                    s => (int.TryParse(s, out int r) && r is > 2020 and < 2027, r));
+                return (version, UserSelectFolder("Select the folder of output G Code files"));
+            });
+
+        Run run = DatabaseFactory.GetDatabase(version)
+            .GetRunInfo()
+            .IfFail(e =>
+            {
+                return new Run()
+                {
+                    RunTag = "R00",
+                    OutputTime = DateTime.Now
+                };
+            }) >>> (result => result with
+            {
+                JobStateOutputPath = GetRegistryValue($"HKEY_CURRENT_USER\\Software\\Hexagon\\CABINET VISION\\S2M {version}", "SNCPath", string.Empty),
+                GCodeOutputPath = outputPath
+            });
+
+        int jobCount = run.Jobs.Count();
+        switch (jobCount)
         {
-            (version, outputPath) = ParseArgs(args);
-        }
-        catch (ArgumentException ex)
-        {
-            Console.WriteLine(ex.Message);
-            Console.ReadKey();
-            Environment.Exit(1);
+            case 0:
+                string jobFolder = UserSelectFolder("No Jobs exist in the database! Please select a Job Folder")
+                    >>> (s => s.EndsWith("G Codes") ? s : s + "\\G Codes");
+                    var job = new Job(Path.GetFileName(jobFolder.TrimEnd('\\')),jobFolder);
+                run.CurrentJob = job;
+                break;
+            case > 1:
+                WriteLine("Multiple Jobs Exist! Select a Job:");
+                run.Jobs.Iter((i, j) => WriteLine("{0} - {1}", ++i, j.Name));
+                ConsoleKeyInfo key;
+                do
+                {
+                    key = ReadKey();
+                }
+                while (key.KeyChar < '1' || key.KeyChar > jobCount + '0');
+                run.CurrentJob = run.Jobs.ToList()[key.KeyChar - '0' - 1];
+                break;
+            case 1:
+                run.CurrentJob = run.Jobs.First();
+                break;
         }
         
-        Database.Database database = DatabaseFactory.GetDatabase(version);
-        Run run = database.GetRunInfo();
-        run.JobStateOutputPath = Util.GetRegistryValue<string>($"HKEY_CURRENT_USER\\Software\\Hexagon\\CABINET VISION\\S2M {version}", "SNCPath");
-
-        if (!run.Jobs.Any())
-        {
-            MessageBox.Show("No Jobs were found in database!\r\nSelect a job Folder.");
-            FolderBrowserDialog fb = new();
-            var result = fb.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                var path = fb.SelectedPath;
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-                if (!path.EndsWith("G Codes"))
-                {
-                    path += "\\G Codes";
-                }
-                run.DestinationPath = path + run.RunTag;
-            }
-            else
-            {
-                MessageBox.Show("You did not select a folder! System will now exit...");
-                Logger.Instance.LogWarning("User did not select a desination folder.");
-            }
-        }
-        else if (run.Jobs.Count() > 1)
-        {
-            int i = 1;
-            Console.WriteLine("Select a Job:");
-            foreach (var job in run.Jobs)
-                Console.WriteLine("{0} - {1}", i++, job.Name);
-            ConsoleKeyInfo key;
-            do
-            {
-                key = Console.ReadKey();
-            }
-            while (key.KeyChar < 1 || key.KeyChar > run.Jobs.Count());
-            run.DestinationPath = run.Jobs.ToList()[key.KeyChar].GCodePath + run.RunTag;
-            run.CurrentJob = run.Jobs.ToList()[key.KeyChar];
-        }
-        else
-        {
-            run.CurrentJob = run.Jobs.First();
-            run.DestinationPath = run.Jobs.First().GCodePath + run.RunTag;
-        }
-
-        FileHandler fileHandler= new(run);
-        fileHandler.MoveAllOutputFiles();
+        new FileHandler(run).MoveAllOutputFiles();
 
         Logger.Instance.LogData(run);
         Environment.Exit(0);
     }
 
-    private static (int version, string path) ParseArgs(string[] args)
+    /// <summary>
+    /// Parse a <see cref="string[]"/> into the CV version and GCode output path.
+    /// </summary>
+    /// <param name="args">The command line args.</param>
+    /// <returns>A <see cref="Fin{T}"/> indicating the success or failure of the parsing.</returns>
+    private static Fin<(int version, string path)> ParseArgs(string[] args) =>
+        args.Length < 2
+            ? Fin<(int, string)>.Fail("Insufficient arguments provided!")
+            : !int.TryParse(args[0], out int v) || !Directory.Exists(args[1])
+                ? Fin<(int, string)>.Fail($"Arguments \"{string.Join(" ", args)}\" are invalid!")
+                : Fin<(int, string)>.Succ((v, args[1]));
+
+    /// <summary>
+    /// Prompt the user to input data through the command line.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="prompt"></param>
+    /// <returns></returns>
+    private static T Prompt<T>(string prompt, Func<string, (bool succeeded, T result)> converter)
     {
-        if (args.Length < 2)
-        {
-            throw new ArgumentException("Insufficient arguments provided!");
-        }
-        if (int.TryParse(args[0], out int v) && !string.IsNullOrEmpty(args[1]))
-        {
-            return (v, args[1]);
-        }
-        else
-        {
-            throw new ArgumentException(string.Format("Could not parse arguments! {0} {1}" + Environment.NewLine + "Expected 0:int 1:string", args[0], args[1]));
-        }
+        WriteLine(prompt);
+        var input = ReadLine();
+
+        if (input is null or "")
+            return Prompt(prompt, converter);
+
+        var (succeeded, result) = converter(input);
+        return succeeded
+            ? result
+            : Prompt("Invalid input! Please try again.", converter);
+    }
+
+    public static void Die(string reason)
+    {
+        MessageBox.Show(reason, "Rename G Code Files Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        Environment.Exit(1);
     }
 }
 
