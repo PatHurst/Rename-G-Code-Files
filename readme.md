@@ -16,10 +16,3 @@ Moves all the G code files to a folder within the CVJ file's folder renaming the
 
 Moves the .snc or .snx file to the CVJ's folder  
 
-
-## Todo
-
-- [ ] Rewrite in a more functional style  
-- [ ] Return Dataset from Database Read Method  
-- [ ] Rewrite using more advanced C# features
-- [ ] Implement better logging; log various levels: Info, Warning, Error

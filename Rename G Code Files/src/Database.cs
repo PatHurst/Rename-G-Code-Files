@@ -21,12 +21,7 @@ abstract class Database : IDisposable
             using var reader = command.ExecuteReader();
 
             return reader.Read()
-                ? new Run()
-                {
-                    RunTag = reader.GetString(0),
-                    OutputTime = reader.GetDateTime(1),
-                    CurrentJob = GetJobInfo()
-                }
+                ? new Run(reader.GetString(0),reader.GetDateTime(1), GetJobInfo())
                 : Fin<Run>.Fail("Database contained no run info!");
         })
         .IfFail(e =>

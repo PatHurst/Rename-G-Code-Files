@@ -5,17 +5,15 @@ namespace Rename_G_Code_Files.src;
 /// </summary>
 internal record struct Run
 {
-    internal Run(string runTag, string gCodeSourcePath, string jobStateSourcePath, DateTime outputTime, Job currentJob)
+    internal Run(string runTag, DateTime outputTime, Option<Job> currentJob)
     {
         RunTag = runTag;
-        GCodeOutputPath = gCodeSourcePath;
-        JobStateOutputPath = jobStateSourcePath;
         OutputTime = outputTime;
         CurrentJob = currentJob;
 
         DestinationPath = CurrentJob
             .Match(
-                j => j.GCodePath + runTag,
+                j => j.GCodePath + "\\" + runTag,
                 () => UserSelectFolder("No job exists! Please select a job folder") >>>
                     (s => s.EndsWith("G Codes") ? s : s + "\\G Codes")
             );

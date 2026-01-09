@@ -1,1 +1,0 @@
-start "" "C:\Users\patri\source\Projects\Rename G Code Files\Rename G Code Files\bin\Release\net10.0-windows\win-x64\Rename G Code Files.exe" 2023 "C:\_Cabinet Vision\S2M Output_temp"
