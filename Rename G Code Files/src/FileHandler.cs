@@ -1,102 +1,110 @@
 namespace Rename_G_Code_Files.src;
 
-internal class FileHandler
+internal static class FileHandler
 {
-    internal FileHandler(Run run)
-    {
-        _run = run;
-    }
-
-    private readonly Run _run;
-
+    const string prefix = "// MATERIAL:";
+    
     /// <summary>
     ///     Moves all the output files to the correct directories.
     /// </summary>
-    public void MoveAllOutputFiles()
+    public static Unit MoveAllOutputFiles(in Run run)
     {
-        if (Directory.GetFiles(_run.GCodeOutputPath).Length > 0)
+        if (Directory.GetFiles(run.GCodeOutputPath).Length > 0)
         {
-            MoveAndRenameGCodeFiles();
-            MoveJobStateFile();
+            _ = MoveAndRenameGCodeFiles(in run) >> MoveJobStateFiles(run);
         }
         else
         {
-            Logger.Instance.LogInformation("No files found in " + _run.GCodeOutputPath);
-            Logger.Instance.LogData(_run);
+            Logger.Instance.LogInformation("No files found in " + run.GCodeOutputPath);
+            Logger.Instance.LogData(in run);
             Environment.Exit(0);
         }
+        return unit;
     }
 
-    private void MoveAndRenameGCodeFiles()
+    private static Unit MoveAndRenameGCodeFiles(in Run run)
     {
-        if (!Directory.Exists(_run.GCodeOutputPath))
-            throw new ArgumentException(_run.GCodeOutputPath, $"G Code source {_run.GCodeOutputPath} does not Exist!");
-        if (!Directory.Exists(_run.DestinationPath))
-            Directory.CreateDirectory(_run.DestinationPath);
-        foreach (string file in Directory.GetFiles(_run.GCodeOutputPath, $"{_run.RunTag}*.anc"))
-        {
-            AddSummaryToCNCFile(file);
-            File.Move(file, RenameGCodeFileByReadLines(file), true);
-        }
+        if (!Directory.Exists(run.DestinationPath))
+            Directory.CreateDirectory(run.DestinationPath);
+
+        var changeDir = par(changeDirectories, run);
+        var addHeader = par(addheader, run);
+        
+        Directory.GetFiles(run.GCodeOutputPath, $"{run.RunTag}*.anc")
+            .Iter(file => 
+                File.Move(file, file >>> addHeader >>> addMaterialToFileName >>> changeDir, true));
+        return unit;
     }
 
-    private string RenameGCodeFileByReadLines(string filePath)
-    {
-        string searchString = "// MATERIAL:";
-        string matName = File.ReadLines(filePath)
-            .Find(l => l.StartsWith(searchString))
-            .Map(l => Right(l, l.Length - searchString.Length).Replace("/", "-").Trim())
-            .IfNone(string.Empty);
+    private static readonly Func<Run,string,string> changeDirectories =
+        (run, original) => $"{run.DestinationPath}\\{Path.GetFileName(original)}";
 
-        string newFileName = Path.GetFileNameWithoutExtension(filePath);
-        return $"{_run.DestinationPath}\\{newFileName} _ {matName}.anc";
-    }
-
-    private void MoveJobStateFile()
-    {
-        WaitForJobStateFile();
-        foreach (string file in Directory.GetFiles(_run.JobStateOutputPath, "*.sn?"))
+    private static readonly Func<string, string> addMaterialToFileName =
+        filePath =>
         {
-            string ext = Path.GetExtension(file);
-            string newFilePath = $"{_run.DestinationPath}\\{_run.CurrentJob.Name}_{_run.OutputTime:ddd, MMM dd yyyy hh-mm-ss}{ext}";
-            File.Move(file, newFilePath, true);
-        }
-    }
+            var material = File.ReadLines(filePath)
+                .Find(l => l.StartsWith(prefix))
+                .Map(l => l[prefix.Length..].Replace("/", "-").Trim())
+                .IfNone("Unknown Material");
 
-    private void AddSummaryToCNCFile(string filePath)
-    {
-        try
-        {
-            string tempText = File.ReadAllText(filePath);
-            using StreamWriter writer = File.CreateText(filePath);
-            string header = $"%\r\n" +
-                            $"//=================== INFO ===================//\r\n" +
-                            $"// JOB NAME: {_run.CurrentJob.Name}\r\n" +
-                            $"// OUTPUT TIME: {_run.OutputTime}\r\n";
-            writer.Write(header);
-            writer.Write(tempText);
-            writer.Flush();
-        }
-        catch (Exception ex)
-        {
-            Logger.Instance.LogException(ex);
-        }
-    }
+            return Path.Combine(
+                Path.GetDirectoryName(filePath)!,
+                $"{Path.GetFileNameWithoutExtension(filePath)} _ {material}.anc"
+            );
+        };
 
-    
-    
-    private void WaitForJobStateFile()
+
+    private static Unit MoveJobStateFiles(Run run) =>
+        WaitForJobStateFile(run.JobStateOutputPath) >>
+            (() => Directory.GetFiles(run.JobStateOutputPath, "*.sn?")
+                .Map(file => (
+                    file,
+                    Path.Combine(run.DestinationPath,
+                        $"{run.CurrentJob.Match(s => s.Name, () => string.Empty)}_{run.OutputTime:ddd, MMM dd yyyy hh-mm-ss}{Path.GetExtension(file)}")
+                ))
+                .Iter(t => File.Move(t.file, t.Item2, true)));
+
+
+    private static readonly Func<Run,string,string> addheader =
+        (run, filePath) =>
+        {
+            try
+            {
+                string tempText = File.ReadAllText(filePath);
+                using StreamWriter writer = File.CreateText(filePath);
+                string header = $"%\r\n" +
+                                $"//=================== INFO ===================//\r\n" +
+                                $"// JOB NAME: {run.CurrentJob.Match(s => s.Name, () => string.Empty)}\r\n" +
+                                $"// OUTPUT TIME: {run.OutputTime}\r\n";
+                writer.Write(header);
+                writer.Write(tempText);
+                writer.Flush();
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.LogException(ex);
+                return filePath;
+            }
+        };
+
+    /// <summary>
+    /// A blocking operation to wait for the job state file to be created.
+    /// Waits for a maximum of 1 minute.
+    /// </summary>
+    private static Unit WaitForJobStateFile(string path)
     {
         for (int counter = 0; counter < 60; counter++)
         {
-            if (Directory.GetFiles(_run.JobStateOutputPath, "*.sn?").Length > 0)
+            if (Directory.GetFiles(path, "*.sn?").Length > 0)
             {
-                break;
+                return unit;
             }
             else
             {
                 Thread.Sleep(1000);
             }
         }
+        return unit;
     }
 }

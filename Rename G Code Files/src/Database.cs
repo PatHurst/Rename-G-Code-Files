@@ -16,8 +16,6 @@ abstract class Database : IDisposable
     public virtual Fin<Run> GetRunInfo() =>
         Try(() =>
         {
-            var jobList = GetJobInfo();
-            
             using var command = Connection.CreateCommand();
             command.CommandText = @"SELECT TOP 1 [RunTag], [RunTime] FROM [RunInfo]";
             using var reader = command.ExecuteReader();
@@ -27,8 +25,7 @@ abstract class Database : IDisposable
                 {
                     RunTag = reader.GetString(0),
                     OutputTime = reader.GetDateTime(1),
-                    Jobs = jobList,
-                    CurrentJob = jobList.FirstOrDefault()
+                    CurrentJob = GetJobInfo()
                 }
                 : Fin<Run>.Fail("Database contained no run info!");
         })
@@ -38,25 +35,24 @@ abstract class Database : IDisposable
             return Fin<Run>.Fail(e);
         });
 
-    private List<Job> GetJobInfo() =>
-        Try(() =>
+    private Option<Job> GetJobInfo() =>
+        Try(Option<Job> () =>
         {
             using var command = Connection.CreateCommand();
-            command.CommandText = @"SELECT TOP 100 [Description], [JobFilePath] FROM [Jobs];";
+            command.CommandText = @"SELECT TOP 1 [Description], [JobFilePath] FROM [Jobs];";
             using var reader = command.ExecuteReader();
 
-            List<Job> jobs = [];
-            while (reader.Read())
+            if (reader.Read())
             {
                 var jobName = reader.GetString(0).Replace('/', '-').Replace('\\', '-');
-                jobs.Add(new Job(jobName, reader.GetString(1)));
+                return new Job(jobName, reader.GetString(1));
             }
-            return jobs;
+            return None;
         })
         .IfFail(e =>
         {
             Logger.Instance.LogException(e);
-            return [];
+            return None;
         });
 
     protected virtual void Dispose(bool disposing)

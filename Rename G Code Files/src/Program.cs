@@ -17,61 +17,38 @@ internal class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        args = ["2023", "C:\\_Cabinet Vision\\S2M Output_temp"]; // for debugging
+        //args = ["2023", "C:\\_Cabinet Vision\\S2M Output_temp"];
 
         Logger.Instance.LogInformation($"Called with args {string.Join(',', args)}");
 
-        // Parse the command line arguments, asking for user input on failure.
-        (int version, string outputPath) = ParseArgs(args)
-            .IfFail(e =>
-            {
-                WriteLine(e);
-                int version = Prompt("Enter your CV version",
-                    s => (int.TryParse(s, out int r) && r is > 2020 and < 2027, r));
-                return (version, UserSelectFolder("Select the folder of output G Code files"));
-            });
+        // Parse the command line arguments.
+        int version = 0;
+        string outputPath = string.Empty;
+        ParseArgs(args)
+            .Match(
+                Succ: result => (version, outputPath) = result,
+                Fail: e =>
+                {
+                    string message = e.Message + Environment.NewLine +
+                        "Call Program with args[0] = CV version, and arg[1] = CV output path.";
+                    Die(message);
+                }
+            );
 
-        Run run = DatabaseFactory.GetDatabase(version)
+        Run run = DatabaseFactory
+            .GetDatabase(version)
             .GetRunInfo()
-            .IfFail(e =>
-            {
-                return new Run()
+            .IfFail(_ => new Run()
                 {
                     RunTag = "R00",
                     OutputTime = DateTime.Now
-                };
-            }) >>> (result => result with
-            {
-                JobStateOutputPath = GetRegistryValue($"HKEY_CURRENT_USER\\Software\\Hexagon\\CABINET VISION\\S2M {version}", "SNCPath", string.Empty),
-                GCodeOutputPath = outputPath
-            });
-
-        int jobCount = run.Jobs.Count();
-        switch (jobCount)
-        {
-            case 0:
-                string jobFolder = UserSelectFolder("No Jobs exist in the database! Please select a Job Folder")
-                    >>> (s => s.EndsWith("G Codes") ? s : s + "\\G Codes");
-                    var job = new Job(Path.GetFileName(jobFolder.TrimEnd('\\')),jobFolder);
-                run.CurrentJob = job;
-                break;
-            case > 1:
-                WriteLine("Multiple Jobs Exist! Select a Job:");
-                run.Jobs.Iter((i, j) => WriteLine("{0} - {1}", ++i, j.Name));
-                ConsoleKeyInfo key;
-                do
+                }) >>> (result => result with
                 {
-                    key = ReadKey();
-                }
-                while (key.KeyChar < '1' || key.KeyChar > jobCount + '0');
-                run.CurrentJob = run.Jobs.ToList()[key.KeyChar - '0' - 1];
-                break;
-            case 1:
-                run.CurrentJob = run.Jobs.First();
-                break;
-        }
-        
-        new FileHandler(run).MoveAllOutputFiles();
+                    JobStateOutputPath = GetRegistryValue($"HKEY_CURRENT_USER\\Software\\Hexagon\\CABINET VISION\\S2M {version}", "SNCPath", string.Empty),
+                    GCodeOutputPath = outputPath
+                });
+
+        FileHandler.MoveAllOutputFiles(in run);
 
         Logger.Instance.LogData(run);
         Environment.Exit(0);
@@ -88,26 +65,6 @@ internal class Program
             : !int.TryParse(args[0], out int v) || !Directory.Exists(args[1])
                 ? Fin<(int, string)>.Fail($"Arguments \"{string.Join(" ", args)}\" are invalid!")
                 : Fin<(int, string)>.Succ((v, args[1]));
-
-    /// <summary>
-    /// Prompt the user to input data through the command line.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="prompt"></param>
-    /// <returns></returns>
-    private static T Prompt<T>(string prompt, Func<string, (bool succeeded, T result)> converter)
-    {
-        WriteLine(prompt);
-        var input = ReadLine();
-
-        if (input is null or "")
-            return Prompt(prompt, converter);
-
-        var (succeeded, result) = converter(input);
-        return succeeded
-            ? result
-            : Prompt("Invalid input! Please try again.", converter);
-    }
 
     public static void Die(string reason)
     {

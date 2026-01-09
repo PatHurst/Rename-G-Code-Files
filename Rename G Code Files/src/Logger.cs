@@ -33,6 +33,7 @@ internal class Logger
     /// </summary>
     /// <param name="e">The exception thrown</param>
     public void LogException(Exception e) => exceptions.Add(e);
+        
 
     /// <summary>
     ///     Log a warning message.
@@ -51,7 +52,7 @@ internal class Logger
     ///     Writes all previous logs to the log file and records additional run data.
     /// </summary>
     /// <param name="run"></param>
-    public void LogData(Run run)
+    public void LogData(in Run run)
     {
         var nl = Environment.NewLine;
         string todayDate = DateTime.Now.Date.ToString("MM/dd/yyyy");
