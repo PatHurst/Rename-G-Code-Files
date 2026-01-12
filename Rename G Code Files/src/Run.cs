@@ -19,10 +19,10 @@ internal record struct Run
             );
     }
 
-    public string RunTag { get; set; }
-    public string GCodeOutputPath { get; set; }
-    public string JobStateOutputPath { get; set; }
-    public DateTime OutputTime { get; set; }
-    public Option<Job> CurrentJob { get; set; }
+    public string RunTag { get; init; }
+    public string GCodeOutputPath { get; init; }
+    public string JobStateOutputPath { get; init; }
+    public DateTime OutputTime { get; init; }
+    public Option<Job> CurrentJob { get; init; }
     public string DestinationPath { get; }
 }

@@ -25,19 +25,19 @@ class SqlLocalDatabase : Database
         }
     }
 
-    public override DateTime GetLastModifiedDate() =>
-        Try(() =>
+    public override DateTime GetLastModifiedDate()
+    {
+        var lastModified = DateTime.MinValue;
+        string sql = """
+            SELECT MAX(ius.last_user_update) AS last_user_update
+            FROM sys.dm_db_index_usage_stats AS ius WHERE ius.database_id = DB_ID();
+            """;
+
+        using var command = Connection.CreateCommand();
+        command.CommandText = sql;
+        var reader = command.ExecuteReader();
+        try
         {
-            var lastModified = DateTime.MinValue;
-            string sql = """
-                SELECT MAX(ius.last_user_update) AS last_user_update
-                FROM sys.dm_db_index_usage_stats AS ius WHERE ius.database_id = DB_ID();
-                """;
-
-            using var command = Connection.CreateCommand();
-            command.CommandText = sql;
-            using var reader = command.ExecuteReader();
-
             if (reader.Read())
             {
                 lastModified = reader.GetValue(0) is DBNull
@@ -45,12 +45,17 @@ class SqlLocalDatabase : Database
                     : reader.GetDateTime(0);
             }
             return lastModified;
-        })
-        .IfFail(e =>
+        }
+        catch (Exception e)
         {
             Logger.Instance.LogException(e);
             return DateTime.MinValue;
-        });
+        }
+        finally
+        {
+            reader?.Close();
+        }
+    }
 
     ~SqlLocalDatabase()
     {

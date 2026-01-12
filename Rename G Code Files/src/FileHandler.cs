@@ -9,7 +9,7 @@ internal static class FileHandler
     /// </summary>
     public static Unit MoveAllOutputFiles(in Run run)
     {
-        if (Directory.GetFiles(run.GCodeOutputPath).Length > 0)
+        if (Directory.GetFiles(run.GCodeOutputPath, $"{run.RunTag}*.anc").Length > 0)
         {
             _ = MoveAndRenameGCodeFiles(in run) >> MoveJobStateFiles(run);
         }

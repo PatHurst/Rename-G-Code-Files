@@ -16,12 +16,14 @@ abstract class Database : IDisposable
     public virtual Fin<Run> GetRunInfo() =>
         Try(() =>
         {
+            var jobInfo = GetJobInfo();
+
             using var command = Connection.CreateCommand();
             command.CommandText = @"SELECT TOP 1 [RunTag], [RunTime] FROM [RunInfo]";
             using var reader = command.ExecuteReader();
 
             return reader.Read()
-                ? new Run(reader.GetString(0),reader.GetDateTime(1), GetJobInfo())
+                ? new Run(reader.GetString(0),reader.GetDateTime(1), jobInfo)
                 : Fin<Run>.Fail("Database contained no run info!");
         })
         .IfFail(e =>

@@ -17,7 +17,7 @@ internal class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        args = ["2023", "C:\\_Cabinet Vision\\S2M Output_temp"];
+        //args = ["2025", "C:\\_Cabinet Vision\\S2M Output_temp"];
 
         Logger.Instance.LogInformation($"Called with args {string.Join(',', args)}");
 
@@ -59,12 +59,22 @@ internal class Program
     /// </summary>
     /// <param name="args">The command line args.</param>
     /// <returns>A <see cref="Fin{T}"/> indicating the success or failure of the parsing.</returns>
-    private static Fin<(int version, string path)> ParseArgs(string[] args) =>
-        args.Length < 2
-            ? Fin<(int, string)>.Fail("Insufficient arguments provided!")
-            : !int.TryParse(args[0], out int v) || !Directory.Exists(args[1])
-                ? Fin<(int, string)>.Fail($"Arguments \"{string.Join(" ", args)}\" are invalid!")
-                : Fin<(int, string)>.Succ((v, args[1]));
+    private static Fin<(int version, string path)> ParseArgs(string[] args)
+    {
+        if(args.Length < 2)
+        {
+            return Fin<(int, string)>.Fail("Insufficient arguments provided!");
+        }
+        if (!int.TryParse(args[0], out int v))
+        {
+            return Fin<(int, string)>.Fail($"\"{args[0]}\" could not be parsed into an integer!");
+        }
+        if (!Directory.Exists(args[1].Trim('\"')))
+        {
+            return Fin<(int, string)>.Fail($"\"{args[1]}\" is not a valid directory!");
+        }
+        return Fin<(int, string)>.Succ((v, args[1]));
+    }
 
     public static void Die(string reason)
     {
