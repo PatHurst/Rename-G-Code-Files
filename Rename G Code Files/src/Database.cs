@@ -13,31 +13,52 @@ abstract class Database : IDisposable
     
     public abstract DateTime GetLastModifiedDate();
 
-    public virtual Fin<Run> GetRunInfo() =>
-        Try(() =>
+    public virtual Fin<Run> GetRunInfo()
+    {
+        DbCommand command = null!;
+        DbDataReader reader = null!;
+        try
         {
+            if (Connection.State != ConnectionState.Open)
+            {
+                Connection.Open();
+            }
             var jobInfo = GetJobInfo();
 
-            using var command = Connection.CreateCommand();
+            command = Connection.CreateCommand();
             command.CommandText = @"SELECT TOP 1 [RunTag], [RunTime] FROM [RunInfo]";
-            using var reader = command.ExecuteReader();
+            reader = command.ExecuteReader();
 
             return reader.Read()
                 ? new Run(reader.GetString(0),reader.GetDateTime(1), jobInfo)
                 : Fin<Run>.Fail("Database contained no run info!");
-        })
-        .IfFail(e =>
+        }
+        catch (Exception e)
         {
             Logger.Instance.LogException(e);
             return Fin<Run>.Fail(e);
-        });
-
-    private Option<Job> GetJobInfo() =>
-        Try(Option<Job> () =>
+        }
+        finally
         {
-            using var command = Connection.CreateCommand();
+            command?.Dispose();
+            reader?.Close();
+            reader?.Dispose();
+        }
+    }
+
+    private Option<Job> GetJobInfo()
+    {
+        DbCommand command = null!;
+        DbDataReader reader = null!;
+        try
+        {
+            if (Connection.State != ConnectionState.Open)
+            {
+                Connection.Open();
+            }
+            command = Connection.CreateCommand();
             command.CommandText = @"SELECT TOP 1 [Description], [JobFilePath] FROM [Jobs];";
-            using var reader = command.ExecuteReader();
+            reader = command.ExecuteReader();
 
             if (reader.Read())
             {
@@ -45,12 +66,19 @@ abstract class Database : IDisposable
                 return new Job(jobName, reader.GetString(1));
             }
             return None;
-        })
-        .IfFail(e =>
+        }
+        catch (Exception e)
         {
             Logger.Instance.LogException(e);
             return None;
-        });
+        }
+        finally
+        {
+            command?.Dispose();
+            reader?.Close();
+            reader?.Dispose();
+        }
+    }
 
     protected virtual void Dispose(bool disposing)
     {

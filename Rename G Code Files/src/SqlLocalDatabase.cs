@@ -17,16 +17,16 @@ class SqlLocalDatabase : Database
         get
         {
             _connection ??= new SqlConnection(connectionString);
-            if (_connection.State != ConnectionState.Open)
-            {
-                _connection.Open();
-            }
             return _connection;
         }
     }
 
     public override DateTime GetLastModifiedDate()
     {
+        if (Connection.State != ConnectionState.Open)
+        {
+            Connection.Open();
+        }
         var lastModified = DateTime.MinValue;
         string sql = """
             SELECT MAX(ius.last_user_update) AS last_user_update

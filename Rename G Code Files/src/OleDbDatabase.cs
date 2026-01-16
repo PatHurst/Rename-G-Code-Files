@@ -17,15 +17,21 @@ class OleDbDatabase : Database
         get
         {
             _connection ??= new OleDbConnection(connectionString);
-            if (_connection.State != ConnectionState.Open)
-            {
-                _connection.Open();
-            }
             return _connection;
         }
     }
 
-    public override DateTime GetLastModifiedDate() => File.GetLastWriteTime(databasePath);
+    public override DateTime GetLastModifiedDate()
+    {
+        try
+        {
+            return File.GetLastWriteTime(databasePath);
+        }
+        catch
+        {
+            return DateTime.MinValue;
+        }
+    }
 
     ~OleDbDatabase()
     {

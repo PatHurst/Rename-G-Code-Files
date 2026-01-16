@@ -17,6 +17,7 @@ internal class Program
     [STAThread]
     private static void Main(string[] args)
     {
+        // uncomment for testing
         //args = ["2025", "C:\\_Cabinet Vision\\S2M Output_temp"];
 
         Logger.Instance.LogInformation($"Called with args {string.Join(',', args)}");
@@ -24,13 +25,15 @@ internal class Program
         // Parse the command line arguments.
         int version = 0;
         string outputPath = string.Empty;
-        ParseArgs(args)
+        _ = ParseArgs(args)
             .Match(
                 Succ: result => (version, outputPath) = result,
                 Fail: e =>
                 {
                     string message = e.Message + Environment.NewLine +
                         "Call Program with args[0] = CV version, and arg[1] = CV output path.";
+
+                    // if we don't have the required arguments we bail out
                     Die(message);
                 }
             );
@@ -44,13 +47,15 @@ internal class Program
                     OutputTime = DateTime.Now
                 }) >>> (result => result with
                 {
-                    JobStateOutputPath = GetRegistryValue($"HKEY_CURRENT_USER\\Software\\Hexagon\\CABINET VISION\\S2M {version}", "SNCPath", string.Empty),
+                    JobStateOutputPath = 
+                    GetRegistryValue($"HKEY_CURRENT_USER\\Software\\Hexagon\\CABINET VISION\\S2M {version}",
+                                     "SNCPath",
+                                     () => UserSelectFolder("Select the folder that contains the job state file.")),
                     GCodeOutputPath = outputPath
                 });
 
         FileHandler.MoveAllOutputFiles(in run);
 
-        Logger.Instance.LogData(run);
         Environment.Exit(0);
     }
 
@@ -73,7 +78,7 @@ internal class Program
         {
             return Fin<(int, string)>.Fail($"\"{args[1]}\" is not a valid directory!");
         }
-        return Fin<(int, string)>.Succ((v, args[1]));
+        return Fin<(int, string)>.Succ((v, args[1].Trim('\"')));
     }
 
     public static void Die(string reason)

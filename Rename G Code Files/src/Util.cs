@@ -2,16 +2,35 @@ namespace Rename_G_Code_Files.src;
 
 internal static class Util
 {
-    public static T GetRegistryValue<T>(string keyPath, string value, T ifFailOrNull) =>
-        Try(
-            Registry.GetValue(keyPath, value, null) >>>
+    public static T GetRegistryValue<T>(string keyPath, string value, T ifFailOrNull)
+    {
+        try
+        {
+            return Registry.GetValue(keyPath, value, null) >>>
                 (o => o is null
                     ? ifFailOrNull
-                    : (T)Convert.ChangeType(o, typeof(T)))
-        )
-        .IfFail(ifFailOrNull);
+                    : (T)Convert.ChangeType(o, typeof(T)));
+        }
+        catch
+        {
+            return ifFailOrNull;
+        }
+    }
 
-    public static string Right(string original, int characters) => original[^characters..];
+    public static T GetRegistryValue<T>(string keyPath, string value, Func<T> ifFailOrNull)
+    {
+        try
+        {
+            return Registry.GetValue(keyPath, value, null) >>>
+                (o => o is null
+                    ? ifFailOrNull()
+                    : (T)Convert.ChangeType(o, typeof(T)));
+        }
+        catch
+        {
+            return ifFailOrNull();
+        }
+    }
 
     public static Func<string,string> asDirectory = path =>
         path.EndsWith('\\')

@@ -1,8 +1,11 @@
+using Microsoft.VisualBasic.ApplicationServices;
+
 namespace Rename_G_Code_Files.src;
 
 internal static class FileHandler
 {
-    const string prefix = "// MATERIAL:";
+    const string material_prefix = "// MATERIAL:";
+    const string size_prefix = "// SHEET SIZE:";
     
     /// <summary>
     ///     Moves all the output files to the correct directories.
@@ -11,12 +14,13 @@ internal static class FileHandler
     {
         if (Directory.GetFiles(run.GCodeOutputPath, $"{run.RunTag}*.anc").Length > 0)
         {
-            _ = MoveAndRenameGCodeFiles(in run) >> MoveJobStateFiles(run);
+            _ = MoveAndRenameGCodeFiles(in run);
+            _ = MoveJobStateFiles(run);
+            Logger.Instance.LogInformation($"Files moved from {run.GCodeOutputPath} to {run.DestinationPath}");
         }
         else
         {
             Logger.Instance.LogInformation("No files found in " + run.GCodeOutputPath);
-            Logger.Instance.LogData(in run);
             Environment.Exit(0);
         }
         return unit;
@@ -31,25 +35,52 @@ internal static class FileHandler
         var addHeader = par(addheader, run);
         
         Directory.GetFiles(run.GCodeOutputPath, $"{run.RunTag}*.anc")
-            .Iter(file => 
-                File.Move(file, file >>> addHeader >>> addMaterialToFileName >>> changeDir, true));
+            .Iter(file =>
+            {
+                safeFileCopy(file, file >>> addMaterialToFileName >>> changeDir)
+                    .Bind(addHeader)
+                    .Match(
+                        _ => File.Delete(file),
+                        _ => Logger.Instance.LogWarning($"The source file \"{file}\" was not deleted.")
+                    );
+
+            });
         return unit;
     }
 
     private static readonly Func<Run,string,string> changeDirectories =
-        (run, original) => $"{run.DestinationPath}\\{Path.GetFileName(original)}";
+        (run, original) => Path.Combine(run.DestinationPath, Path.GetFileName(original));
+
+    private static Fin<string> safeFileCopy(string from, string to)
+    {
+        try
+        {
+            File.Copy(from, to, true);
+            return to;
+        }
+        catch (Exception e)
+        {
+            Logger.Instance.LogException(e);
+            return Fin<string>.Fail(e);
+        }
+    }
 
     private static readonly Func<string, string> addMaterialToFileName =
         filePath =>
         {
-            var material = File.ReadLines(filePath)
-                .Find(l => l.StartsWith(prefix))
-                .Map(l => l[prefix.Length..].Replace("/", "-").Trim())
+            var lines = File.ReadLines(filePath);
+            var material = lines
+                .Find(l => l.StartsWith(material_prefix))
+                .Map(l => l[material_prefix.Length..].Replace("/", "-").Trim())
                 .IfNone("Unknown Material");
+            var sheetSize = lines
+                .Find(l => l.StartsWith(size_prefix))
+                .Map(l => l[size_prefix.Length..].Trim())
+                .IfNone(string.Empty);
 
             return Path.Combine(
                 Path.GetDirectoryName(filePath)!,
-                $"{Path.GetFileNameWithoutExtension(filePath)} _ {material}.anc"
+                $"{Path.GetFileNameWithoutExtension(filePath)} _ ({material}) ({sheetSize}).anc"
             );
         };
 
@@ -62,10 +93,10 @@ internal static class FileHandler
                     Path.Combine(run.DestinationPath,
                         $"{run.CurrentJob.Match(s => s.Name, () => string.Empty)}_{run.OutputTime:ddd, MMM dd yyyy hh-mm-ss}{Path.GetExtension(file)}")
                 ))
-                .Iter(t => File.Move(t.file, t.Item2, true)));
+                .Iter(t => safeFileCopy(t.file, t.Item2)));
 
 
-    private static readonly Func<Run,string,string> addheader =
+    private static readonly Func<Run,string,Fin<string>> addheader =
         (run, filePath) =>
         {
             try
@@ -84,7 +115,7 @@ internal static class FileHandler
             catch (Exception ex)
             {
                 Logger.Instance.LogException(ex);
-                return filePath;
+                return Fin<string>.Fail(ex);
             }
         };
 
@@ -98,6 +129,8 @@ internal static class FileHandler
         {
             if (Directory.GetFiles(path, "*.sn?").Length > 0)
             {
+                // wait to make sure CV is done writing to the file.
+                Thread.Sleep(500);
                 return unit;
             }
             else
@@ -105,6 +138,7 @@ internal static class FileHandler
                 Thread.Sleep(1000);
             }
         }
+        Logger.Instance.LogInformation("Timed out waiting for Job State file to be created!");
         return unit;
     }
 }
